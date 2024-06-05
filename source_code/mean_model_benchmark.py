@@ -7,15 +7,13 @@ from models import mean_model
 from inference import find_metrics, find_stratifed_mets
 
 split_type = 'c_blind'
-hpc = True
-if os.getcwd()[0] == 'C': #working locally
-    hpc = False
+hpc = False if os.getcwd()[0] == 'C' else True
 #genral data loading
 if hpc:
     omic_dir_path = '../../GDSC/downloaded_data' #hpc
     
 else:
-    omic_dir_path = '../Downloaded_data' #hpc
+    omic_dir_path = '../../Downloaded_data' #local
 
 gdsc2_target_path = 'data/GDSC2_Wed Aug GDSC2_30_15_49_31_2023.csv'
 pubchem_ids_path = 'data/drugs_gdsc_to_pubID.csv'

@@ -17,7 +17,7 @@ hpc = False if os.getcwd()[0] == 'C' else True
 if hpc:
     omic_dir_path = '../../GDSC/downloaded_data' #hpc    
 else:
-    omic_dir_path = '../Downloaded_data'
+    omic_dir_path = '../../Downloaded_data'
 
 gdsc2_target_path = 'data/GDSC2_Wed Aug GDSC2_30_15_49_31_2023.csv'
 pubchem_ids_path = 'data/drugs_gdsc_to_pubID.csv'
