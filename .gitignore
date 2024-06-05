@@ -1,3 +1,6 @@
+source_code/models/graphdrp.py
+source_code/models/tta.py
+source_code/models/twin_model.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
