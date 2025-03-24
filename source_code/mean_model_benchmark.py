@@ -7,14 +7,15 @@ from models import mean_model
 from inference import find_metrics, find_stratifed_mets
 
 split_type = 'c_blind'
+example_data = True 
 hpc = False if os.getcwd()[0] == 'C' else True
 #genral data loading
-if hpc:
-    omic_dir_path = '../../GDSC/downloaded_data' #hpc
+# if hpc:
+#     omic_dir_path = '../../GDSC/downloaded_data' #hpc
     
-else:
-    omic_dir_path = '../../Downloaded_data' #local
-
+# else:
+#     omic_dir_path = '../../Downloaded_data' #local
+omic_dir_path = 'data'
 gdsc2_target_path = 'data/GDSC2_Wed Aug GDSC2_30_15_49_31_2023.csv'
 pubchem_ids_path = 'data/drugs_gdsc_to_pubID.csv'
 
@@ -22,9 +23,18 @@ if hpc:
     os.chdir('..')
 print(f'using hpc: {hpc}')
 
+if example_data:
+    rna = pd.read_csv('data/example_data/xpr_sub.csv', index_col=0)
+    ic50 = pd.read_csv('data/example_data/ic50_sub.csv', index_col=0)
+    drugs_to_smiles = pd.read_csv('data/drugs_to_smiles_gdsc2.csv', index_col=0)['0']
+    pairs_path = f'data/example_data/train_test_pairs/{split_type}/'
 
-rna, ic50, drugs_to_smiles = data_loading.load_omics_drugs_target(
-    omic_dir_path, gdsc2_target_path, pubchem_ids_path, save=False)
+else:
+    rna, ic50, drugs_to_smiles = data_loading.load_omics_drugs_target(
+        omic_dir_path, gdsc2_target_path, pubchem_ids_path, save=False)
+    pairs_path = f'data/train_test_pairs/{split_type}/'
+
+print(rna.shape, ic50.shape, len(drugs_to_smiles))
 drugs_with_smiles = drugs_to_smiles.index
 
 
@@ -38,8 +48,6 @@ _, _, y = data_processing.create_all_drugs(rna, one_hot_drugs, ic50)
 # 3 train test splits 
 splits_mets = [] 
 for seed in range(1, 4):
-    pairs_path = f'data/train_test_pairs/{split_type}/'
-
     train_pairs = pd.read_csv(
         f'{pairs_path}seed_{seed}_train', header=None)[0].values
     val_pairs = pd.read_csv(

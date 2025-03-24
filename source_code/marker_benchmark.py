@@ -10,15 +10,16 @@ import data_loading, data_processing, training, inference
 
 model_type = 'marker'
 split_type = 'mixed'
+example_data = True
 epochs = int(sys.argv[1])
 batch_size = 128
-
 hpc = False if os.getcwd()[0] == 'C' else True
-if hpc:
-    omic_dir_path = '../../GDSC/downloaded_data' #hpc    
-else:
-    omic_dir_path = '../../Downloaded_data'
+# if hpc:
+#     omic_dir_path = '../../GDSC/downloaded_data' #hpc    
+# else:
+#     omic_dir_path = '../../Downloaded_data'
 
+omic_dir_path = 'data'
 gdsc2_target_path = 'data/GDSC2_Wed Aug GDSC2_30_15_49_31_2023.csv'
 pubchem_ids_path = 'data/drugs_gdsc_to_pubID.csv'
 
@@ -27,8 +28,18 @@ if hpc:
 print(f'using hpc: {hpc}')
 
 
-rna, ic50, drugs_to_smiles = data_loading.load_omics_drugs_target(
-    omic_dir_path, gdsc2_target_path, pubchem_ids_path, save=False)
+if example_data:
+    rna = pd.read_csv('data/example_data/xpr_sub.csv', index_col=0).astype(np.float32)
+    ic50 = pd.read_csv('data/example_data/ic50_sub.csv', index_col=0).astype(np.float32)
+    drugs_to_smiles = pd.read_csv('data/drugs_to_smiles_gdsc2.csv', index_col=0)['0']
+    pairs_path = f'data/example_data/train_test_pairs/{split_type}/'
+
+else:
+    rna, ic50, drugs_to_smiles = data_loading.load_omics_drugs_target(
+        omic_dir_path, gdsc2_target_path, pubchem_ids_path, save=False)
+    pairs_path = f'data/train_test_pairs/{split_type}/'
+
+
 drugs_with_smiles = drugs_to_smiles.index
 
 
@@ -49,7 +60,6 @@ x_drug = pd.DataFrame(
 
  # train and eval model for 3 train test splits and 3 model seeds
 for seed in range(1, 4):
-    pairs_path = f'data/train_test_pairs/{split_type}/'
 
     train_pairs = pd.read_csv(
         f'{pairs_path}seed_{seed}_train', header=None)[0].values

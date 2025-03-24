@@ -21,21 +21,24 @@ model_type = str(sys.argv[1]) # e.g. tta
 split_type = str(sys.argv[2]) #e.g. c-blind
 epochs = int(sys.argv[3])
 
-
+example_data = False
 supported_models = ['tta', 'tta-db', 'tcnn', 'graphdrp', 'gcn_gdrp']
 supported_splits = ['c_blind', 'mixed', 'd_blind']
 
 #path setting
 hpc = False if os.getcwd()[0] == 'C' else True
 #genral data loading
-if hpc:
-    omic_dir_path = '../../GDSC/downloaded_data' #hpc
+# if hpc:
+#     omic_dir_path = '../../GDSC/downloaded_data' #hpc
     
-else:
-    omic_dir_path = '../../Downloaded_data' 
+# else:
+#     omic_dir_path = '../../Downloaded_data'
+
+omic_dir_path  = 'data' 
     
 gdsc2_target_path = 'data/GDSC2_Wed Aug GDSC2_30_15_49_31_2023.csv'
 pubchem_ids_path = 'data/drugs_gdsc_to_pubID.csv'
+genomics_path = 'data/PANCAN_simple_MOBEM.tsv'
 
 if hpc:
     os.chdir('..')
@@ -60,14 +63,25 @@ def main():
         if model_type == 'tcnn':
             batch_size = 100
         elif model_type == 'graphdrp' or model_type == 'gcn_gdrp':
-            batch_size=1024
+            batch_size = 1024
         else:
-            batch_size=128
+            batch_size = 128
             
         #set save=true to create drugs_to_smiles, 
         #and once saved can use save=False to load the same drugs_to_smiles dict
-        rna, ic50, drugs_to_smiles = data_loading.load_omics_drugs_target(
-            omic_dir_path, gdsc2_target_path, pubchem_ids_path, save=False)
+        if example_data:
+            rna = pd.read_csv('data/example_data/xpr_sub.csv', index_col=0).astype(np.float32)
+            ic50 = pd.read_csv('data/example_data/ic50_sub.csv', index_col=0).astype(np.float32)
+            drugs_to_smiles = pd.read_csv('data/drugs_to_smiles_gdsc2.csv', index_col=0)['0']
+            pairs_path = f'data/example_data/train_test_pairs/{split_type}/'
+
+        else:
+            rna, ic50, drugs_to_smiles = data_loading.load_omics_drugs_target(
+                omic_dir_path, gdsc2_target_path, pubchem_ids_path, save=False)
+            pairs_path = f'data/train_test_pairs/{split_type}/'
+        
+
+
         drugs_with_smiles = drugs_to_smiles.index
 
         one_hot_drugs = np.zeros((len(drugs_with_smiles), len(drugs_with_smiles)))
@@ -93,7 +107,10 @@ def main():
                 index=x_drug.index)
 
         if model_type == 'tcnn':
-            gen = data_loading.read_genomics('data/PANCAN_simple_MOBEM.tsv', omic_dir_path)
+            if example_data:
+                gen = pd.read_csv('data/example_data/gen_sub.csv', index_col=0).astype(np.float32)
+            else:
+                gen = data_loading.read_genomics(genomics_path, omic_dir_path)
             gen = gen.loc[rna.index]
             dts_pad = tcnn_data_processing.pad_smiles(drugs_to_smiles)
             drug_to_hot_smile = tcnn_data_processing.hot_encode_smiles(dts_pad)
@@ -101,14 +118,17 @@ def main():
 
 
         if model_type == 'graphdrp' or model_type == 'gcn_gdrp':
-            gen = data_loading.read_genomics('data/PANCAN_simple_MOBEM.tsv', omic_dir_path)
+            if example_data:
+                gen = pd.read_csv('data/example_data/gen_sub.csv', index_col=0).astype(np.float32)
+            else:
+                gen = data_loading.read_genomics(genomics_path, omic_dir_path)
+            gen = data_loading.read_genomics(genomics_path, omic_dir_path)
             gen = gen.loc[rna.index]
             x_omic, _, y = data_processing.create_all_drugs(gen, one_hot_drugs, ic50)
             x_drug = graphdrp_data_processing.create_graphs(drugs_with_smiles, y)
 
         # train and eval model for 3 train test splits and 3 model seeds
         for seed in range(1, 4):
-            pairs_path = f'data/train_test_pairs/{split_type}/'
 
             train_pairs = pd.read_csv(
                 f'{pairs_path}seed_{seed}_train', header=None)[0].values
