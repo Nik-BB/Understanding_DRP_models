@@ -20,7 +20,9 @@ If you don't want to use the example data and the datasets (instructions on down
  
 ### Running the literature models
 
-main_run_model.py file can be run for each model and testing type by specific both as arguments. The arguments are model_type, split_type, and epochs. E.g. python main_run_model.py tta c_blind 10 runs DeepTTA with cancer blind splitting for 10 epochs. 
+main_run_model.py file can be run for each model and testing type by specific both as arguments. The arguments are model_type, split_type, and epochs. E.g. 
+python source_code/main_run_model.py tta c_blind 10 
+runs DeepTTA with cancer blind splitting for 10 epochs. 
 
 Setting example_data = True allows the models to run using example data provided (subset of full dataset). To run the models with all data use instructions from the dataset section and note that the paths to the datasets may need to be set as described above.
 
@@ -29,7 +31,7 @@ The datasets needed to re-train the models are publicly available.
 
 * Transcriptomics and genomics data can be downloaded from the Genomics of drug sensitivity in cancer database https://www.cancerrxgene.org/ -> https://www.cancerrxgene.org/gdsc1000/GDSC1000_WebResources/Home.html
 Here the expression profiles, genomic profiles and meta data mapping the cell names (Annotated list of cell-lines)  can be found. 
-The expression profiles need to be convert to csv and renamed to gdsc_expresstion_dat.csv to run out of the box.  The cell names also need to be converted to csv and renamed to gdsc_cell_names.csv to run out of the box. (Or the file names can be changed in the read_rna_gdsc function in data_loading.py). The genomics profiles come from  the MULT omics Cancer functional events (CFEs) BEMs for cell-lines zip download and the PANCAN_simple_MOBEM.rdata.tsv  is the file required.   
+The expression profiles data file needs to be convert to csv and renamed to gdsc_expresstion_dat.csv to run out of the box.  The cell names also need to be converted to csv and renamed to gdsc_cell_names.csv to run out of the box. (Or the file names can be changed in the read_rna_gdsc function in data_loading.py). The genomics profiles come from  the MULT omics Cancer functional events (CFEs) BEMs for cell-lines zip download and the PANCAN_simple_MOBEM.rdata.tsv is the file required.   
 
 
 * Drug response data in the form of IC50 values can be downloaded form values from GDSC https://www.cancerrxgene.org/ ->
@@ -45,11 +47,14 @@ Train test splits are available in the data folder and new train test splits can
 
 A dict mapping drug names to smiles strings can be found and saved using the create_drug_to_smiles_mapping_gdsc2 method from data_loading.py. This dict can then be read in, in later use. 
 
+## Running BinaryET 
+This can be done inside the BinaryET folder see the readme inside the folder for further running instructions. The datasets required are the same as the ones outlined here. 
+
 ## Problem Formulation 
 
 The goal of DRP is to predict how effective different drugs are for different cancer types. 
 Here we predict the I50 values, the concentration of a drug needed to inhibit the activity of a cell lie by 50%, as a measure of efficacy. 
-We feed omics profiles of cell lines and simple column representaions of drugs though a neural network to do this. 
+This is typically done using omics profiles of cell lines and chemical profiles of drugs. 
 
 Consider the traning set $T = \lbrace \boldsymbol{x_{c,i}}, \boldsymbol{x_{d,i}}, y_i \rbrace$  where $\boldsymbol{x_{c,i}}$, $\boldsymbol{x_{d,i}}$  are representation of the $i^{th}$ cell line and drug respectively and
  $y_i$ is the IC50 value associated with the $i^{th}$ cell line drug pair.
