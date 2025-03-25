@@ -21,7 +21,7 @@ model_type = str(sys.argv[1]) # e.g. tta
 split_type = str(sys.argv[2]) #e.g. c-blind
 epochs = int(sys.argv[3])
 
-example_data = False
+example_data = True
 supported_models = ['tta', 'tta-db', 'tcnn', 'graphdrp', 'gcn_gdrp']
 supported_splits = ['c_blind', 'mixed', 'd_blind']
 
