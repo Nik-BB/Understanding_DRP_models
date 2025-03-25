@@ -8,7 +8,6 @@ from scipy.stats import pearsonr,spearmanr
 import copy
 import time
 import pickle
-
 import torch
 from torch.utils import data
 import torch.nn.functional as F
@@ -21,7 +20,7 @@ import math
 #np.random.seed(1)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+#Model from - https://github.com/jianglikun/DeepTTC
 class LayerNorm(nn.Module):
     def __init__(self, hidden_size, variance_epsilon=1e-12):
 
