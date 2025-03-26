@@ -96,6 +96,8 @@ def run_model(model_type, config, save_name, save_dir=None):
         p_path = f'results/mets/{save_dir}/{save_name}_'
     else:
         p_path = f'results/mets/{save_name}_'
+    if not os.path.exists(p_path):
+        os.makedirs(p_path)
     with open(f'{p_path}config.pickle', 'wb') as handle:
         pickle.dump(config, handle, protocol=pickle.HIGHEST_PROTOCOL)
 

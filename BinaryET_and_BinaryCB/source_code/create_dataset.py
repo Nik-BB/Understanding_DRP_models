@@ -30,8 +30,8 @@ else:
     tt_path = f'/data/home/wpw035/DRP-lit-comp-aberrations/Binary_ic50_lit/data/'
 
 if example_data:
-    example_dir = 'data/'
-    tt_path = 'data/example_data/'
+    example_dir = 'data_et/'
+    tt_path = 'data_et/example_data/'
 
     
 #read and format target values gdsc1 
@@ -210,9 +210,9 @@ def create_drug_to_smiles_mapping_gdsc2(pub_ids_path, save=True):
 class ExampleData():
     '''loads in example data subset of full dataset from data folder'''
     def __init__(self, data_dir='..data/'):
-        rna = pd.read_csv(f'{data_dir}example_data/xpr_sub.csv', index_col=0).astype(np.float32)
-        ic50 = pd.read_csv(f'{data_dir}example_data/ic50_sub.csv', index_col=0).astype(np.float32)
-        drugs_to_smiles = pd.read_csv('data/drugs_to_smiles_gdsc2.csv', index_col=0)['0']
+        rna = pd.read_csv(f'{example_dir}example_data/xpr_sub.csv', index_col=0).astype(np.float32)
+        ic50 = pd.read_csv(f'{example_dir}example_data/ic50_sub.csv', index_col=0).astype(np.float32)
+        drugs_to_smiles = pd.read_csv(f'{example_dir}/drugs_to_smiles_gdsc2.csv', index_col=0)['0']
         self.rna_omic = rna
         self.y = ic50
         self.drugs_to_smiles = drugs_to_smiles
@@ -228,7 +228,7 @@ class ClDrugIntegrator():
             print('if full dataset has been downloaded, as outlined in ReadME set example_data=False to use full dataset in create_dataset.py')
             rna = pd.read_csv(f'{example_dir}example_data/xpr_sub.csv', index_col=0).astype(np.float32)
             ic50 = pd.read_csv(f'{example_dir}example_data/ic50_sub.csv', index_col=0).astype(np.float32)
-            drugs_to_smiles = pd.read_csv('data/drugs_to_smiles_gdsc2.csv', index_col=0)
+            drugs_to_smiles = pd.read_csv(f'{example_dir}/drugs_to_smiles_gdsc2.csv', index_col=0)
             self.rna_omic = rna
             self.y = ic50
             self.drugs_to_smiles = drugs_to_smiles       

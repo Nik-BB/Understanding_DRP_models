@@ -21,7 +21,7 @@ import bpe_tokenisation
 device = "cuda" if torch.cuda.is_available() else "cpu"
 #device = 'cpu'
 owd = os.getcwd()
-log = True
+log = False
 hpc = False
 # if owd[0].upper() == 'C':
 #     hpc=False
@@ -94,6 +94,16 @@ def run_model(model_type, config, save_name, save_dir='multi_splits'):
     '''runs one model defiend by model_type '''
     print(os.getcwd())
     p_path = f'results/{save_dir}/mets/{save_name}_'
+    m_dir = f'results/{save_dir}/mets'
+    p_dir = f'results/{save_dir}/preds'
+    th_dir = f'results/{save_dir}/train_hist'
+    if not os.path.exists(m_dir):
+        os.makedirs(m_dir)
+    if not os.path.exists(p_dir):
+        os.makedirs(p_dir)
+    if not os.path.exists(th_dir):
+        os.makedirs(th_dir)
+
     with open(f'{p_path}config.pickle', 'wb') as handle:
         pickle.dump(config, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
