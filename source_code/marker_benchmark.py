@@ -13,7 +13,8 @@ split_type = 'mixed'
 example_data = True
 epochs = int(sys.argv[1])
 batch_size = 128
-hpc = False if os.getcwd()[0] == 'C' else True
+hpc = False 
+#if os.getcwd()[0] == 'C' else True
 # if hpc:
 #     omic_dir_path = '../../GDSC/downloaded_data' #hpc    
 # else:

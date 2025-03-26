@@ -8,7 +8,8 @@ from inference import find_metrics, find_stratifed_mets
 
 split_type = 'c_blind'
 example_data = True 
-hpc = False if os.getcwd()[0] == 'C' else True
+hpc = False 
+#if os.getcwd()[0] == 'C' else True
 #genral data loading
 # if hpc:
 #     omic_dir_path = '../../GDSC/downloaded_data' #hpc

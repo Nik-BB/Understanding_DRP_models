@@ -26,7 +26,8 @@ supported_models = ['tta', 'tta-db', 'tcnn', 'graphdrp', 'gcn_gdrp']
 supported_splits = ['c_blind', 'mixed', 'd_blind']
 
 #path setting
-hpc = False if os.getcwd()[0] == 'C' else True
+hpc = False 
+#if os.getcwd()[0] == 'C' else True
 #genral data loading
 # if hpc:
 #     omic_dir_path = '../../GDSC/downloaded_data' #hpc
@@ -122,7 +123,6 @@ def main():
                 gen = pd.read_csv('data/example_data/gen_sub.csv', index_col=0).astype(np.float32)
             else:
                 gen = data_loading.read_genomics(genomics_path, omic_dir_path)
-            gen = data_loading.read_genomics(genomics_path, omic_dir_path)
             gen = gen.loc[rna.index]
             x_omic, _, y = data_processing.create_all_drugs(gen, one_hot_drugs, ic50)
             x_drug = graphdrp_data_processing.create_graphs(drugs_with_smiles, y)
