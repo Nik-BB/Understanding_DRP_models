@@ -5,6 +5,7 @@ BinaryET can be run in main_run_model.py using three arguments models_to_run, sp
 python source_code/main_run_model.py db_tf c_blind 100
 
 run_muti_dbs.py runs BinaryCB (model using chemberta) with 
-python source_code/run_muti_dbs.py 
+python source_code/run_muti_dbs.py
+when running the cmd from the BinaryET_andBinaryCB dir. 
 .The version of chemberta can be controlled using db_model_version in the config dict in run_muti_dbs.py  see chemberta on hugging face for a full list of models that they support. Again data paths are set in create_dataset.py. 
 

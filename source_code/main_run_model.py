@@ -51,7 +51,6 @@ else:
     models_to_run = [model_type]
 
 
-
 def main():
     for model_type in models_to_run:
         #checks
@@ -81,7 +80,9 @@ def main():
                 omic_dir_path, gdsc2_target_path, pubchem_ids_path, save=False)
             pairs_path = f'data/train_test_pairs/{split_type}/'
         
-
+        #create folders to save models and results
+        data_loading.create_ms_folder(model_type, split_type)
+        data_loading.create_mets_save_dir(model_type)
 
         drugs_with_smiles = drugs_to_smiles.index
 

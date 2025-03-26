@@ -35,6 +35,9 @@ else:
         omic_dir_path, gdsc2_target_path, pubchem_ids_path, save=False)
     pairs_path = f'data/train_test_pairs/{split_type}/'
 
+if not os.path.exists('results/mm_mets'):
+    os.makedirs('results/mm_mets')
+
 print(rna.shape, ic50.shape, len(drugs_to_smiles))
 drugs_with_smiles = drugs_to_smiles.index
 

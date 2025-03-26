@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd 
+import os
 
 def load_omics_drugs_target(omic_dir_path, gdsc2_target_path, 
                             pubchem_ids_path, save=False):
@@ -175,3 +176,15 @@ def read_rna_gdsc(gdsc_dir_path):
     assert sum(rna_raw.columns.isna()) == 0
     
     return rna_raw
+
+
+def create_ms_folder(model_type, split_type):
+    dir_path = f'saved_models/{model_type}/{split_type}'
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
+def create_mets_save_dir(model_type):
+    for split in range(1, 4):
+        dir_path = f'results/tt_split_{split}/predictions/{model_type}'
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)

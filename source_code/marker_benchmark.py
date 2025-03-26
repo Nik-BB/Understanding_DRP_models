@@ -43,6 +43,8 @@ else:
 
 drugs_with_smiles = drugs_to_smiles.index
 
+data_loading.create_ms_folder(model_type, split_type)
+data_loading.create_mets_save_dir(model_type)
 
 one_hot_drugs = np.zeros((len(drugs_with_smiles), len(drugs_with_smiles)))
 np.fill_diagonal(one_hot_drugs, 1)
