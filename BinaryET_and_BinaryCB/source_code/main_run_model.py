@@ -3,7 +3,6 @@
 import os
 import sys
 import pickle
-import wandb
 import torch
 import numpy as np
 import pandas as pd
@@ -18,15 +17,15 @@ import inference
 import utils
 from models import drp_tf, mlp
 import bpe_tokenisation
-import wandb
+#import wandb
 device = "cuda" if torch.cuda.is_available() else "cpu"
 #device = 'cpu'
 owd = os.getcwd()
 log = True
 hpc = False
-if owd[0].upper() == 'C':
-    hpc=False
-    log = False
+# if owd[0].upper() == 'C':
+#     hpc=False
+#     log = False
 if hpc:
     os.chdir(owd)
     os.chdir('..')

@@ -27,8 +27,8 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 owd = os.getcwd()
 log = True
 hpc = False
-if owd[0].upper() == 'C':
-    hpc=False
+#if owd[0].upper() == 'C':
+    #hpc=False
 if hpc:
     os.chdir(owd)
     os.chdir('..')

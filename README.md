@@ -21,8 +21,8 @@ If you don't want to use the example data and the datasets (instructions on down
 ### Running the literature models
 
 main_run_model.py file can be run for each model and testing type by specific both as arguments. The arguments are model_type, split_type, and epochs. E.g. 
-python source_code/main_run_model.py tta c_blind 10 
-runs DeepTTA with cancer blind splitting for 10 epochs. 
+python source_code/main_run_model.py tcnn c_blind 10 
+runs tCNNs with cancer blind splitting for 10 epochs. 
 
 Setting example_data = True allows the models to run using example data provided (subset of full dataset). To run the models with all data use instructions from the dataset section and note that the paths to the datasets may need to be set as described above.
 

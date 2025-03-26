@@ -223,39 +223,6 @@ class ClDrugIntegrator():
     def __init__(self, omics=['prot', 'rna'], drug_rep='smiles'):
         #load in omic and target data
         all_omics = []
-        if 'prot' in omics:
-            self.prot_omic = read_prot()
-            self.prot_omic = read_rna_gdsc(self.prot_omic)
-            all_omics.append(self.prot_omic)
-        if 'rna' in omics:
-            self.rna_omic = read_rna_gdsc(rna_dir)
-            self.rna_omic = self.rna_omic.astype(np.float32)
-            #drop RH-18 and HCC202 as have over 95% missing values. (next most is 60%)
-            self.rna_omic = self.rna_omic.drop(['RH-18', 'HCC202'])
-            all_omics.append(self.rna_omic)
-
-        self.y = read_gdsc2(
-            f'{data_path}GDSC2_Wed Aug GDSC2_30_15_49_31_2023.csv').T 
-
-        #only keep overlapping cell lines    
-        overlap_cls = set(self.y.index)
-        for omic in all_omics:
-            overlap_cls = overlap_cls.intersection(omic.index)
-        overlap_cls  = list(overlap_cls)
-
-        self.y = self.y.loc[overlap_cls]
-        if 'prot' in omics:
-            self.prot_omic = self.prot_omic.loc[overlap_cls]
-        if 'rna' in omics:
-            self.rna_omic = self.rna_omic.loc[overlap_cls]
-
-        if drug_rep == 'smiles':
-            self.drugs_to_smiles = pd.read_csv(
-                f'{data_path}drugs_to_smiles_gdsc2.csv', index_col=0)
-            overlapping_drugs = set(
-                self.drugs_to_smiles.index).intersection(self.y.columns)
-            overlapping_drugs = list(overlapping_drugs)
-            self.y = self.y[overlapping_drugs]     
         if example_data:
             print('Running with example data, subset of full dataset')
             print('if full dataset has been downloaded, as outlined in ReadME set example_data=False to use full dataset in create_dataset.py')
@@ -265,7 +232,40 @@ class ClDrugIntegrator():
             self.rna_omic = rna
             self.y = ic50
             self.drugs_to_smiles = drugs_to_smiles       
-            
+        else:
+            if 'prot' in omics:
+                self.prot_omic = read_prot()
+                self.prot_omic = read_rna_gdsc(self.prot_omic)
+                all_omics.append(self.prot_omic)
+            if 'rna' in omics:
+                self.rna_omic = read_rna_gdsc(rna_dir)
+                self.rna_omic = self.rna_omic.astype(np.float32)
+                #drop RH-18 and HCC202 as have over 95% missing values. (next most is 60%)
+                self.rna_omic = self.rna_omic.drop(['RH-18', 'HCC202'])
+                all_omics.append(self.rna_omic)
+
+            self.y = read_gdsc2(
+                f'{data_path}GDSC2_Wed Aug GDSC2_30_15_49_31_2023.csv').T 
+
+            #only keep overlapping cell lines    
+            overlap_cls = set(self.y.index)
+            for omic in all_omics:
+                overlap_cls = overlap_cls.intersection(omic.index)
+            overlap_cls  = list(overlap_cls)
+
+            self.y = self.y.loc[overlap_cls]
+            if 'prot' in omics:
+                self.prot_omic = self.prot_omic.loc[overlap_cls]
+            if 'rna' in omics:
+                self.rna_omic = self.rna_omic.loc[overlap_cls]
+
+            if drug_rep == 'smiles':
+                self.drugs_to_smiles = pd.read_csv(
+                    f'{data_path}drugs_to_smiles_gdsc2.csv', index_col=0)
+                overlapping_drugs = set(
+                    self.drugs_to_smiles.index).intersection(self.y.columns)
+                overlapping_drugs = list(overlapping_drugs)
+                self.y = self.y[overlapping_drugs]     
 
     def drop_na_prot(self):
         '''fs method to drop nans from prot omics '''
