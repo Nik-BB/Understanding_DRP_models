@@ -4,6 +4,9 @@
 Exploration of how  different datatypes and subnetworks of state-of-the-art drug response prediction (DRP) models effect performance. 
 
 
+## Quick start 
+To run the mean model baseline/benchmark with example_data = True simply run python source_code/mean_model_benchmark.py 
+
 ## Using the repository
 
 It is recommended to use the example data provided to create the models on a subset of the full dataset. This demonstrates how the code functions. To create the full models, used in the paper,  downloading the datasets from external websites is required (see Datasetses section for full instructions) and remember to then set example_data = False.
@@ -49,6 +52,10 @@ A dict mapping drug names to smiles strings can be found and saved using the cre
 
 ## Running BinaryET 
 This can be done inside the BinaryET folder see the readme inside the folder for further running instructions. The datasets required are the same as the ones outlined here. 
+
+
+### Environment 
+The yml file gives the environment used with package versions, the key packages are pytorch torch_geometric transformers numpy pandas sklearn 
 
 ## Problem Formulation 
 
