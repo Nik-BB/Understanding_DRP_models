@@ -5,7 +5,11 @@ Exploration of how  different datatypes and subnetworks of state-of-the-art drug
 
 
 ## Quick start 
-To run the mean model baseline/benchmark with example_data = True simply run python source_code/mean_model_benchmark.py 
+To run the mean model baseline/benchmark with the example data (subset of full data) example_data = True simply run:
+
+```
+python source_code/mean_model_benchmark.py 
+```
 
 ## Using the repository
 
