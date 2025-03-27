@@ -5,9 +5,12 @@ import numpy as np
 
 cwd = os.getcwd()
 if cwd[0].upper() == 'C':
-    mc_path = r'C:/Users/Nik/Documents/PhD_code/year3_code/ProtGraphRo/data/GDSC2_Wed Aug GDSC2_30_15_49_31_2023.csv'
+    pass
+    #mc_path = r'C:/Users/Nik/Documents/PhD_code/year3_code/ProtGraphRo/data/GDSC2_Wed Aug GDSC2_30_15_49_31_2023.csv'
+    mc_path = 'data_et/GDSC2_Wed Aug GDSC2_30_15_49_31_2023.csv'
 else:
-    mc_path = r'/data/home/wpw035/drp_omic_graph/Prot_rna_graph/data/GDSC2_Wed Aug GDSC2_30_15_49_31_2023.csv'
+    #mc_path = r'/data/home/wpw035/drp_omic_graph/Prot_rna_graph/data/GDSC2_Wed Aug GDSC2_30_15_49_31_2023.csv'
+    mc_path = 'data_et/GDSC2_Wed Aug GDSC2_30_15_49_31_2023.csv'
 
 def find_drug_to_max_con_gdsc2():
     '''Find max concentration of each drug used also find drugs with mutiple 

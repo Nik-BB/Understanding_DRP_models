@@ -33,7 +33,7 @@ if hpc:
 
 supported_models = ['db_tf', 'db_marker']
 if __name__ == '__main__':
-    models_to_run = str(sys.argv[1]) # e.g. 
+    models_to_run = str(sys.argv[1]) # e.g. db_tf
     split_type = str(sys.argv[2]) #e.g. c_blind
     epochs = int(sys.argv[3])    
 
@@ -51,7 +51,7 @@ def process_model_specific_data(drug_data_type, db_architecture, binary_ic50=Tru
     '''reutrn drug cell line and y data for all drugs for a given model'''
 
     ds = create_dataset.ClDrugIntegrator(omics=['rna'])
-    if binary_ic50:
+    if binary_ic50 and ds.full_data:
         #binarise ic50 vals
         drug_to_max_con, multi_con_drugs = binary_truth.find_drug_to_max_con_gdsc2()
         #drop drugs with mulitple concentrations (4)

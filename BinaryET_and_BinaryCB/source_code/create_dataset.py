@@ -229,10 +229,13 @@ class ClDrugIntegrator():
             rna = pd.read_csv(f'{example_dir}example_data/xpr_sub.csv', index_col=0).astype(np.float32)
             ic50 = pd.read_csv(f'{example_dir}example_data/ic50_sub.csv', index_col=0).astype(np.float32)
             drugs_to_smiles = pd.read_csv(f'{example_dir}/drugs_to_smiles_gdsc2.csv', index_col=0)
+            drugs_to_smiles = drugs_to_smiles.loc[ic50.columns]
             self.rna_omic = rna
             self.y = ic50
-            self.drugs_to_smiles = drugs_to_smiles       
+            self.drugs_to_smiles = drugs_to_smiles     
+            self.full_data = False
         else:
+            self.full_data = True
             if 'prot' in omics:
                 self.prot_omic = read_prot()
                 self.prot_omic = read_rna_gdsc(self.prot_omic)
