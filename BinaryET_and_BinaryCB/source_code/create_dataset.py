@@ -8,20 +8,22 @@ from torch_geometric.data import Dataset as Dataset_g
 from torch.utils.data import Dataset
 
 
-example_data = True #use and load in example data just a subset of full data
+example_data = False #use and load in example data just a subset of full data
 
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 #device = 'cpu'
 cwd = os.getcwd()
-
+local=True
 #working locally
-if cwd[0].upper() == 'C':
-    data_path = r'C:/Users/Nik/Documents/PhD_code/year3_code/Binary_ic50/Binary_ic50_lit/data/'
-    #data_path = f'c:/Users/Nik/Documents/PhD_code/year3_code/drp_omic_graph/Prot_rna_graph/data/'
-    omic_data_path = r'C:\Users\Nik\Documents\PhD_code\year3_code\Downloaded_data\\'
-    rna_dir = r'C:\Users\Nik\Documents\PhD_code\year3_code\Downloaded_data'
-    tt_path = data_path
+if local:
+    data_path = '../data/' #path to dir with ic50 and drugs to smiles mapping
+    rna_dir = '../data/' #path to dir with expression proflies and cell names
+    tt_path = 'data_et/' #path to train test split
+    # data_path = r'C:/Users/Nik/Documents/PhD_code/year3_code/Binary_ic50/Binary_ic50_lit/data/'
+    # omic_data_path = r'C:\Users\Nik\Documents\PhD_code\year3_code\Downloaded_data\\'
+    # rna_dir = r'C:\Users\Nik\Documents\PhD_code\year3_code\Downloaded_data'
+    # tt_path = data_path
 
 else:
     data_path = f'/data/home/wpw035/drp_omic_graph/Prot_rna_graph/data/'
@@ -83,36 +85,14 @@ def one_hot_encode(x):
     encoded_df = pd.DataFrame(frame)
     return encoded_df
 
-
-def read_prot():
-    
-    prot_raw = pd.read_csv(
-        f'{omic_data_path}Proteinomics_large.tsv',
-        sep = '\t', header=1
-    )
-    prot_raw.drop(index=0, inplace=True)
-
-    prot_raw.index = prot_raw['symbol']
-    prot_raw.drop(columns=['symbol', 'Unnamed: 1'], inplace=True)
-
-    #replace missing protomics values
-    p_miss = prot_raw.isna().sum().sum() / (len(prot_raw) * len(prot_raw.columns))
-    print(f'Number of missing prot values {p_miss}')
-
-    assert sum(prot_raw.index.duplicated()) == 0
-    assert sum(prot_raw.columns.duplicated()) == 0
-    assert sum(prot_raw.index.isna()) == 0
-    assert sum(prot_raw.columns.isna()) == 0
-    
-    return prot_raw
                 
 def read_rna_gdsc(gdsc_dir_path):
     #read in rna-seq data
     #gdsc_path = '/data/home/wpw035/GDSC'
-    rna_raw = pd.read_csv(f'{gdsc_dir_path}/gdsc_expresstion_dat.csv')
+    rna_raw = pd.read_csv(f'{gdsc_dir_path}gdsc_expresstion_dat.csv')
     rna_raw.index = rna_raw['GENE_SYMBOLS']
     rna_raw.drop(columns=['GENE_SYMBOLS','GENE_title'], inplace=True)
-    cell_names_raw = pd.read_csv(f'{gdsc_dir_path}/gdsc_cell_names.csv', skiprows=1, skipfooter=1)
+    cell_names_raw = pd.read_csv(f'{gdsc_dir_path}gdsc_cell_names.csv', skiprows=1, skipfooter=1)
     cell_names_raw.drop(index=0, inplace=True)
 
     #chagne ids to cell names
@@ -236,10 +216,6 @@ class ClDrugIntegrator():
             self.full_data = False
         else:
             self.full_data = True
-            if 'prot' in omics:
-                self.prot_omic = read_prot()
-                self.prot_omic = read_rna_gdsc(self.prot_omic)
-                all_omics.append(self.prot_omic)
             if 'rna' in omics:
                 self.rna_omic = read_rna_gdsc(rna_dir)
                 self.rna_omic = self.rna_omic.astype(np.float32)
